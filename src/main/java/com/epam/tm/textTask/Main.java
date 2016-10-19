@@ -56,8 +56,8 @@ public class Main {
 
 
         List<Textable> list = new ArrayList<>();
-        
-        System.out.println(sentence.getAllWords().get(0).getValue());
+
+        System.out.println(sentence.getAllLetters().get(12).getValue());
 
     }
 }
