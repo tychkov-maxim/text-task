@@ -42,17 +42,19 @@ public abstract class UnitText implements Textable {
 
     public List<Textable> getAllLetters(){
         List<Textable> list = new ArrayList<>();
-        getAllUnits(list,new Letter().getClass());
+        getAllUnits(list,Letter.class);
         return  list;
     }
 
     public List<Textable> getAllWords(){
         List<Textable> list = new ArrayList<>();
-        getAllUnits(list,new Word().getClass());
+        getAllUnits(list,Word.class);
         return  list;
     }
 
-
-
-
+    public List<Textable> getAllSentences(){
+        List<Textable> list = new ArrayList<>();
+        getAllUnits(list,Sentence.class);
+        return  list;
+    }
 }
