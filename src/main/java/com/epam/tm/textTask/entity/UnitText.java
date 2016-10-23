@@ -33,8 +33,10 @@ public abstract class UnitText implements Textable {
         for (Textable iter : units) {
             if (clazz.isInstance(iter)) {
                 unitsText.add(iter);
-            }else
-                iter.getAllUnits(unitsText,clazz);
+            }else {
+                if (!Letter.class.isInstance(iter))
+                    iter.getAllUnits(unitsText, clazz);
+            }
         }
 
 

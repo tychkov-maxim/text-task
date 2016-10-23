@@ -3,13 +3,13 @@ package com.epam.tm.textTask.entity;
 import java.util.List;
 
 public class Letter implements Textable {
-    private char value;
+    private String value;
 
 
     public Letter() {
     }
 
-    public Letter(char value) {
+    public Letter(String value) {
         this.value = value;
     }
 
@@ -21,7 +21,7 @@ public class Letter implements Textable {
     public void getAllUnits(List<Textable> unitText, Class clazz) {
         throw new UnsupportedOperationException("");
     }
-    public void setValue(char value) {
+    public void setValue(String value) {
         this.value = value;
     }
 }
