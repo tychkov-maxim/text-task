@@ -1,14 +1,11 @@
 package com.epam.tm.textTask;
-import com.epam.tm.textTask.entity.Letter;
-import com.epam.tm.textTask.entity.Sentence;
+import com.epam.tm.textTask.entity.Text;
 import com.epam.tm.textTask.entity.Textable;
-import com.epam.tm.textTask.entity.Word;
+import com.epam.tm.textTask.util.RegExpParser;
 import com.epam.tm.textTask.util.TextScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -16,15 +13,17 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Sentence sentence = new Sentence();
         TextScanner textScanner = new TextScanner();
-        try {
-            sentence = textScanner.getSentence();
-        } catch (java.io.IOException e1) {
-            e1.printStackTrace();
+        RegExpParser parser = new RegExpParser();
+
+        Text text = parser.parseText(textScanner.readFile());
+
+        for (Textable textable : text.getAllWords()) {
+            System.out.println(textable.getValue());
+            System.out.println("--------------");
         }
-
-        System.out.println(sentence.getAllWords().get(1).getValue());
-
     }
+
+
+
 }

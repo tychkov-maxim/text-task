@@ -1,44 +1,31 @@
 package com.epam.tm.textTask.util;
 
 import com.epam.tm.textTask.entity.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
+import java.nio.file.Files;
 
 
 public class TextScanner {
+
+    public static final Logger log = LoggerFactory.getLogger(TextScanner.class);
     private static String FILENAME = "123.txt";
 
-    public Sentence getSentence() throws IOException {
-        File file = new File(FILENAME);
-        FileReader r = new FileReader(file.getAbsoluteFile());
+    public String readFile(){
 
-        Sentence sentence = new Sentence();
+        String text = "";
+        try
+        {
+            byte[] b = Files.readAllBytes(new File(FILENAME).toPath());
+            text = new String(b);
 
-        try {
-            int s;
-            Word word = new Word();
-            String s1;
-            while((s = r.read()) != -1) {
-                s1 = new String(Character.toChars(s));
-
-                if (s1.equals("!")) {
-                    sentence.addUnit(word);
-                    sentence.addUnit(new Letter(s1));
-                    word = new Word();
-                }
-
-                if (s1.equals(" ")) {
-                    sentence.addUnit(word);
-                    sentence.addUnit(new Letter(s1));
-                    word = new Word();
-                }else{
-                    word.addUnit(new Letter(s1));
-                }
-
-            }
-        }catch (IOException e){
-            e.printStackTrace();
+        } catch (IOException e) {
+            log.error("Can't read file",e);
         }
 
-        return sentence;
+        return text;
     }
+
 }
