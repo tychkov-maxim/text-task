@@ -18,10 +18,10 @@ public class Main {
 
         Text text = parser.parseText(textScanner.readFile());
 
-        for (Textable textable : text.getAllWords()) {
-            System.out.println(textable.getValue());
-            System.out.println("--------------");
+        for (Textable textable : text.getAllLetters()) {
+            System.out.print(textable.getValue());
         }
+
     }
 
 

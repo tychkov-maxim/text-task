@@ -20,13 +20,13 @@ public abstract class UnitText implements Textable {
 
     @Override
     public String getValue() {
-        String res = new String();
+        String res = "";
         for (Textable unit : units) {
             res += unit.getValue();
         }
         return res;
     }
-//
+
 
     @Override
     public void getAllUnits(List<Textable> unitsText,Class clazz) {

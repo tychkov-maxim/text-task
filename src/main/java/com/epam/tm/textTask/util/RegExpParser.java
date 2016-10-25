@@ -12,11 +12,11 @@ import java.util.regex.Pattern;
 
 public class RegExpParser implements Parser{
 
-    public static final Logger log = LoggerFactory.getLogger(RegExpParser.class);
+    private static final Logger log = LoggerFactory.getLogger(RegExpParser.class);
 
-    private static final String PARAGRAPHS_SPLITTER = "\\n";
-    private static final String SENTENCES_SPLITTER = "[.|!|?]";
-    private static final String PARTSENTENCES_SPLITTER = "\\h|[!|?|.]";
+    private static final String PARAGRAPHS_SPLITTER = "\\v";
+    private static final String SENTENCES_SPLITTER = "[.,!,?]";
+    private static final String PARTSENTENCES_SPLITTER = "\\h|[!,?,.]";
 
     public RegExpParser() {
     }
@@ -24,22 +24,26 @@ public class RegExpParser implements Parser{
     @Override
     public Text parseText(String text) {
         Text parsedText = new Text();
-        List<String> paragraphs = split(PARAGRAPHS_SPLITTER,text);
+        List<String> linesOfParagraphs = split(PARAGRAPHS_SPLITTER,text);
 
-        for (String paragraph : paragraphs) {
-            log.debug("paragraph: {}", paragraph);
-            parsedText.addUnit(parseParagraph(paragraph));
+        for (String paragraph : linesOfParagraphs) {
+            log.debug("Paragraph: {}", paragraph);
+            Paragraph p = parseParagraph(paragraph);
+            p.addUnit(getLastSymbolWhiteSpace(paragraph));
+            parsedText.addUnit(p);
         }
-
         return  parsedText;
     }
 
+    private WhiteSpace getLastSymbolWhiteSpace(String line){
+        return new WhiteSpace(line.charAt(line.length()-1));
+    }
 
     private Paragraph parseParagraph(String linePar){
         Paragraph paragraph = new Paragraph();
-        List<String> sentences = split(SENTENCES_SPLITTER,linePar);
+        List<String> linesOfSentences = split(SENTENCES_SPLITTER,linePar);
 
-        for (String sentence : sentences) {
+        for (String sentence : linesOfSentences) {
             log.debug("Sentence: {}",sentence);
             paragraph.addUnit(parseSentence(sentence));
         }
@@ -49,21 +53,26 @@ public class RegExpParser implements Parser{
 
     private Sentence parseSentence(String lineSentence){
         Sentence sentence = new Sentence();
-        List<String> partsOfSentence = split(PARTSENTENCES_SPLITTER, lineSentence);
+        List<String> linesOfWords = split(PARTSENTENCES_SPLITTER, lineSentence);
 
-        for (String s : partsOfSentence) {
-            log.debug("partOfSentence: {}",s);
-            sentence.addUnit(parseWord(s));
+        for (String s : linesOfWords) {
+            log.debug("Word: {}",s);
+            sentence.addUnit(parseWord(s.substring(0,s.length()-1)));
+            sentence.addUnit(getLastSymbolAsPunctuationMark(s));
         }
 
         return sentence;
+    }
+
+    private PunctuationMark getLastSymbolAsPunctuationMark(String line){
+        return new PunctuationMark(line.charAt(line.length()-1));
     }
 
     private Word parseWord(String lineWord){
         Word word = new Word();
 
         for (int i = 0; i < lineWord.length(); i++) {
-            log.debug("parseWord: {}",lineWord.charAt(i));
+            log.debug("Letter: {}",lineWord.charAt(i));
             word.addUnit(new Letter(lineWord.charAt(i)));
         }
 
