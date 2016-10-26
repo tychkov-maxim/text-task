@@ -1,6 +1,6 @@
 package com.epam.tm.textTask.entity;
 
-public class WhiteSpace extends Letter {
+public class WhiteSpace extends PunctuationMark {
     public WhiteSpace() {
     }
 

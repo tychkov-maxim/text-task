@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.PrimitiveIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,6 +18,7 @@ public class RegExpParser implements Parser{
     private static final String PARAGRAPHS_SPLITTER = "\\v";
     private static final String SENTENCES_SPLITTER = "[.,!,?]";
     private static final String PARTSENTENCES_SPLITTER = "\\h|[!,?,.]";
+    private static final String PUNCTUATION_REGEXP = "\\p{Punct}+";
 
     public RegExpParser() {
     }
@@ -57,18 +59,47 @@ public class RegExpParser implements Parser{
 
         for (String s : linesOfWords) {
             log.debug("Word: {}",s);
-            sentence.addUnit(parseWord(s.substring(0,s.length()-1)));
-            sentence.addUnit(getLastSymbolAsPunctuationMark(s));
+            List<Textable> partsOfWord = parseWord(s);
+            for (Textable textable : partsOfWord) {
+                sentence.addUnit(textable);
+            }
         }
 
         return sentence;
     }
 
-    private PunctuationMark getLastSymbolAsPunctuationMark(String line){
-        return new PunctuationMark(line.charAt(line.length()-1));
+
+    //FIXME
+    /** here can be more than only one word with marks */
+    private List<Textable> parseWord(String lineWord){
+        List<Textable> list = new ArrayList<>();
+
+        Pattern pattern = Pattern.compile(PUNCTUATION_REGEXP);
+        Matcher matcher = pattern.matcher(lineWord);
+
+        //int val = 0;
+
+        if (matcher.find()) {
+                list.add(parseLetters(lineWord.substring(0, matcher.start() - 1)));
+
+                List<PunctuationMark> marks = parsePunctuationMarks(matcher.group());
+                for (PunctuationMark mark : marks) {
+                    list.add(mark);
+                }
+
+
+            }else
+                list.add(parseLetters(lineWord));
+
+            //val = matcher.end();
+
+
+
+
+        return list;
     }
 
-    private Word parseWord(String lineWord){
+    private Word parseLetters(String lineWord){
         Word word = new Word();
 
         for (int i = 0; i < lineWord.length(); i++) {
@@ -79,7 +110,18 @@ public class RegExpParser implements Parser{
         return word;
     }
 
-    private List<String> split(String regExp, String line){
+    private List<PunctuationMark> parsePunctuationMarks(String marksLine){
+        List<PunctuationMark> marks = new ArrayList<>();
+
+        for (int i = 0; i < marksLine.length(); i++) {
+            log.debug("PunctuationMark: {}",marksLine.charAt(i));
+            marks.add(new PunctuationMark(marksLine.charAt(i)));
+        }
+
+        return marks;
+    }
+
+    public List<String> split(String regExp, String line){
         List<String> list = new ArrayList<>();
         Pattern pattern = Pattern.compile(regExp);
         Matcher matcher = pattern.matcher(line);
