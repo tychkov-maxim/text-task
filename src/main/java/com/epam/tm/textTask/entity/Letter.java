@@ -2,7 +2,7 @@ package com.epam.tm.textTask.entity;
 
 import java.util.List;
 
-public class Letter implements Textable {
+public class Letter implements TextComponent {
     private char value;
 
 
@@ -18,7 +18,7 @@ public class Letter implements Textable {
     }
 
     @Override
-    public void getAllUnits(List<Textable> unitText, Class clazz) {
+    public void getAllUnits(List<TextComponent> unitText, Class clazz) {
         throw new UnsupportedOperationException("");
     }
     public void setValue(char value) {

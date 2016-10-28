@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.PrimitiveIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -59,9 +58,9 @@ public class RegExpParser implements Parser{
 
         for (String s : linesOfWords) {
             log.debug("Word: {}",s);
-            List<Textable> partsOfWord = parseWord(s);
-            for (Textable textable : partsOfWord) {
-                sentence.addUnit(textable);
+            List<TextComponent> partsOfWord = parseWord(s);
+            for (TextComponent textComponent : partsOfWord) {
+                sentence.addUnit(textComponent);
             }
         }
 
@@ -71,8 +70,8 @@ public class RegExpParser implements Parser{
 
     //FIXME
     /** here can be more than only one word with marks */
-    private List<Textable> parseWord(String lineWord){
-        List<Textable> list = new ArrayList<>();
+    private List<TextComponent> parseWord(String lineWord){
+        List<TextComponent> list = new ArrayList<>();
 
         Pattern pattern = Pattern.compile(PUNCTUATION_REGEXP);
         Matcher matcher = pattern.matcher(lineWord);

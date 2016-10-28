@@ -1,14 +1,10 @@
 package com.epam.tm.textTask;
 import com.epam.tm.textTask.entity.Text;
-import com.epam.tm.textTask.entity.Textable;
+import com.epam.tm.textTask.entity.TextComponent;
 import com.epam.tm.textTask.util.RegExpParser;
 import com.epam.tm.textTask.util.TextScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Main {
     public static final Logger log = LoggerFactory.getLogger(Main.class);
@@ -20,8 +16,8 @@ public class Main {
 
         Text text = parser.parseText(textScanner.readFile());
 
-        for (Textable textable : text.getAllLetters()) {
-            System.out.print(textable.getValue());
+        for (TextComponent textComponent : text.getAllLetters()) {
+            System.out.print(textComponent.getValue());
         }
     }
 

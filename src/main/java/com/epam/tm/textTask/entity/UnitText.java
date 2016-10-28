@@ -3,25 +3,25 @@ package com.epam.tm.textTask.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UnitText implements Textable {
-    private List<Textable> units;
+public abstract class UnitText implements TextComponent {
+    private List<TextComponent> units;
 
     public UnitText() {
         units = new ArrayList<>();
     }
 
-    public void addUnit(Textable unit) {
+    public void addUnit(TextComponent unit) {
         units.add(unit);
     }
 
-    public void removeUnit(Textable unit) {
+    public void removeUnit(TextComponent unit) {
         units.remove(unit);
     }
 
     @Override
     public String getValue() {
         String res = "";
-        for (Textable unit : units) {
+        for (TextComponent unit : units) {
             res += unit.getValue();
         }
         return res;
@@ -29,8 +29,8 @@ public abstract class UnitText implements Textable {
 
 
     @Override
-    public void getAllUnits(List<Textable> unitsText,Class clazz) {
-        for (Textable iter : units) {
+    public void getAllUnits(List<TextComponent> unitsText, Class clazz) {
+        for (TextComponent iter : units) {
             if (clazz.isInstance(iter)) {
                 unitsText.add(iter);
             }else {
@@ -42,20 +42,20 @@ public abstract class UnitText implements Textable {
 
     }
 
-    public List<Textable> getAllLetters(){
-        List<Textable> list = new ArrayList<>();
+    public List<TextComponent> getAllLetters(){
+        List<TextComponent> list = new ArrayList<>();
         getAllUnits(list,Letter.class);
         return  list;
     }
 
-    public List<Textable> getAllWords(){
-        List<Textable> list = new ArrayList<>();
+    public List<TextComponent> getAllWords(){
+        List<TextComponent> list = new ArrayList<>();
         getAllUnits(list,Word.class);
         return  list;
     }
 
-    public List<Textable> getAllSentences(){
-        List<Textable> list = new ArrayList<>();
+    public List<TextComponent> getAllSentences(){
+        List<TextComponent> list = new ArrayList<>();
         getAllUnits(list,Sentence.class);
         return  list;
     }
