@@ -27,10 +27,10 @@ public class RegExpParser implements Parser{
         complianceClasses.put(Sentence.class,Word.class);
 
         complianceRegex = new HashMap<>();
-        complianceRegex.put(Text.class,"\\v");
-        complianceRegex.put(Paragraph.class,"[.|!|?]");
-        complianceRegex.put(Sentence.class,"\\h|[!|?|.]");
-        complianceRegex.put(Word.class,"\\h");
+        complianceRegex.put(Text.class,"\\v+");
+        complianceRegex.put(Paragraph.class,"[.|!|?]\\v+{0,}");
+        complianceRegex.put(Sentence.class,"\\h|[!|?|.]\\v+{0,}");
+        complianceRegex.put(Word.class,".\\v{0,}");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class RegExpParser implements Parser{
             if (inst instanceof Word) {
                 parseWord((Word)inst,part);
             }else {
-                log.debug("Work with: {} and parse: {}", clazz, part);
+                log.debug("Work with: {} and parse: {}", complianceClasses.get(clazz), part);
                 inst.addUnit(parseTo(part, complianceClasses.get(clazz)));
             }
 
@@ -73,7 +73,7 @@ public class RegExpParser implements Parser{
         }
     }
 
-    public List<String> split(String regExp, String line){
+    private List<String> split(String regExp, String line){
         List<String> list = new ArrayList<>();
         Pattern pattern = Pattern.compile(regExp);
         Matcher matcher = pattern.matcher(line);
@@ -85,5 +85,21 @@ public class RegExpParser implements Parser{
         }
         return list;
     }
+
+    private String findWithRegex(String regExp, String line){
+        Pattern pattern = Pattern.compile(regExp);
+        Matcher matcher = pattern.matcher(line);
+
+        String res;
+        if (matcher.find()) {
+            res = matcher.group();
+        }
+        else
+            res = null;
+
+        return res;
+
+    }
+
 
 }
