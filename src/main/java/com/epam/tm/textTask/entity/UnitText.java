@@ -3,7 +3,7 @@ package com.epam.tm.textTask.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UnitText implements TextComponent {
+public abstract class UnitText implements TextComponent{
     private List<TextComponent> units;
 
     public UnitText() {
@@ -18,17 +18,14 @@ public abstract class UnitText implements TextComponent {
         units.remove(unit);
     }
 
-    @Override
-    public String getValue() {
+    public String getString() {
         String res = "";
         for (TextComponent unit : units) {
-            res += unit.getValue();
+            res += unit.getString();
         }
         return res;
     }
 
-
-    @Override
     public void getAllUnits(List<TextComponent> unitsText, Class clazz) {
         for (TextComponent iter : units) {
             if (clazz.isInstance(iter)) {
@@ -38,8 +35,6 @@ public abstract class UnitText implements TextComponent {
                     iter.getAllUnits(unitsText, clazz);
             }
         }
-
-
     }
 
     public List<TextComponent> getAllLetters(){

@@ -2,7 +2,7 @@ package com.epam.tm.textTask.entity;
 
 import java.util.List;
 
-public class Letter implements TextComponent {
+public class Letter implements TextLeaf {
     private char value;
 
 
@@ -13,11 +13,10 @@ public class Letter implements TextComponent {
         this.value = value;
     }
 
-    public String getValue() {
+    public String getString() {
         return "" + value;
     }
 
-    @Override
     public void getAllUnits(List<TextComponent> unitText, Class clazz) {
         throw new UnsupportedOperationException("");
     }
