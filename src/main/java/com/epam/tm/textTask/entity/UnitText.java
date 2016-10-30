@@ -3,7 +3,7 @@ package com.epam.tm.textTask.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class UnitText implements TextComponent{
+public abstract class UnitText implements TextComposite{
     private List<TextComponent> units;
 
     public UnitText() {

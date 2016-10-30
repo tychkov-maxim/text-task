@@ -1,6 +1,7 @@
 package com.epam.tm.textTask.parser;
 
 import com.epam.tm.textTask.entity.*;
+import com.epam.tm.textTask.parser.Exceptions.ParserException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,53 +17,60 @@ public class RegExpParser implements Parser{
 
     private static final Logger log = LoggerFactory.getLogger(RegExpParser.class);
 
-    private  Map<Class<? extends TextComponent>,Class<? extends  TextComponent>> complianceClasses;
-    private  Map<Class<? extends  TextComponent>, String> complianceRegex;
+    private Map<Class<? extends TextComposite>,Class<? extends  TextComposite>> complianceClasses;
+    private  Map<Class<? extends  TextComposite>, String> complianceRegex;
 
     public RegExpParser() {
         complianceClasses = new HashMap<>();
         complianceClasses.put(Text.class,Paragraph.class);
         complianceClasses.put(Paragraph.class,Sentence.class);
         complianceClasses.put(Sentence.class,Word.class);
-        complianceClasses.put(Word.class,Letter.class);
 
         complianceRegex = new HashMap<>();
-        complianceRegex.put(Text.class,"\\n");
-        complianceRegex.put(Paragraph.class,"");
-        complianceRegex.put(Sentence.class,"");
-        complianceRegex.put(Word.class,"");
-        complianceRegex.put(Letter.class,"");
+        complianceRegex.put(Text.class,"\\v");
+        complianceRegex.put(Paragraph.class,"[.|!|?]");
+        complianceRegex.put(Sentence.class,"\\h|[!|?|.]");
+        complianceRegex.put(Word.class,"\\h");
     }
 
-    //TODO not need catch exception here
     @Override
-    public Text parseText(String source) {
-        try {
+    public Text parseText(String source) throws ParserException {
             return parseTo(source,Text.class);
-        } catch (Exception e) {
-            log.error("Error when try to parse", e);
-        }
-
-        return null;
     }
 
-    //TODO My exception
     @Override
-    public <T extends TextComponent> T parseTo(String source, Class<T> clazz) throws Exception {
+    public <T extends TextComposite> T parseTo(String source, Class<T> clazz) throws ParserException {
         T inst;
+
         try {
              inst = clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException e) {
-            throw new Exception("MyException");
+            log.error("Error when trying to create new instance {}",clazz);
+            throw new ParserException("Error when trying to create new instance",e);
         }
 
-        List<String> parts = split(source,complianceRegex.get(clazz));
+
+        List<String> parts = split(complianceRegex.get(clazz), source);
+        log.debug("{} splitted for {} by Regex: {}",clazz, parts, complianceRegex.get(clazz));
         for (String part : parts) {
-            parseTo(part,complianceClasses.get(clazz));
+
+            if (inst instanceof Word) {
+                parseWord((Word)inst,part);
+            }else {
+                log.debug("Work with: {} and parse: {}", clazz, part);
+                inst.addUnit(parseTo(part, complianceClasses.get(clazz)));
+            }
+
         }
-
-
         return inst;
+    }
+
+    private void parseWord(Word word,String lineWord) {
+
+        for (int i = 0; i < lineWord.length(); i++) {
+            log.debug("Letter: {}", lineWord.charAt(i));
+            word.addUnit(new Letter(lineWord.charAt(i)));
+        }
     }
 
     public List<String> split(String regExp, String line){
