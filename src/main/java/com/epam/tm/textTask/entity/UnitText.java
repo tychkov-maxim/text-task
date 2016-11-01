@@ -31,7 +31,7 @@ public abstract class UnitText implements TextComposite{
             if (clazz.isInstance(iter)) {
                 unitsText.add(iter);
             }else {
-                if (!Letter.class.isInstance(iter))
+                if (!Symbol.class.isInstance(iter))
                     iter.getAllUnits(unitsText, clazz);
             }
         }
@@ -39,7 +39,7 @@ public abstract class UnitText implements TextComposite{
 
     public List<TextComponent> getAllLetters(){
         List<TextComponent> list = new ArrayList<>();
-        getAllUnits(list,Letter.class);
+        getAllUnits(list,Symbol.class);
         return  list;
     }
 

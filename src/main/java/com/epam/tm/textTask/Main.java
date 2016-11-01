@@ -9,12 +9,15 @@ import com.epam.tm.textTask.util.TextScanner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Iterator;
+import java.util.Scanner;
 
 public class Main {
     public static final Logger log = LoggerFactory.getLogger(Main.class);
 
-    public static void main(String[] args) throws ParserException {
+    public static void main(String[] args) throws ParserException, FileNotFoundException {
 
         TextScanner textScanner = new TextScanner();
         RegExpParser parser = new RegExpParser();
@@ -22,10 +25,6 @@ public class Main {
         Text text = parser.parseText(textScanner.readFile());
 
         System.out.println(text.getString());
-
-
-
-
     }
 
 }

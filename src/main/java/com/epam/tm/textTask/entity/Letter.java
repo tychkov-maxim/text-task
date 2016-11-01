@@ -1,26 +1,20 @@
 package com.epam.tm.textTask.entity;
 
-import java.util.List;
+public class Letter extends Symbol {
 
-public class Letter implements TextLeaf {
-    private char value;
-
-
-    public Letter() {
+    private Letter(char value) {
+        super(value);
     }
 
-    public Letter(char value) {
-        this.value = value;
+    public static Letter of(char sym){
+        if (CharacterCache.cache[sym] == null)
+            CharacterCache.cache[sym] = new Letter(sym);
+
+        return CharacterCache.cache[sym];
     }
 
-    public String getString() {
-        return "" + value;
-    }
-
-    public void getAllUnits(List<TextComponent> unitText, Class clazz) {
-        throw new UnsupportedOperationException("");
-    }
-    public void setValue(char value) {
-        this.value = value;
+    private static class CharacterCache {
+        private CharacterCache(){}
+        static final Letter[] cache = new Letter[Character.MAX_VALUE];
     }
 }
