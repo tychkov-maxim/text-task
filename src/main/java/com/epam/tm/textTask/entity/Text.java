@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Text extends UnitText {
 
-    public List<TextComponent> getAllParagraphs(){
+    public List<TextComponent> getAllParagrahps(){
         List<TextComponent> list = new ArrayList<>();
         getAllUnits(list,Paragraph.class);
         return  list;

@@ -1,8 +1,5 @@
 package com.epam.tm.textTask;
-import com.epam.tm.textTask.entity.Text;
-import com.epam.tm.textTask.entity.TextComponent;
-import com.epam.tm.textTask.entity.UnitText;
-import com.epam.tm.textTask.entity.Word;
+import com.epam.tm.textTask.entity.*;
 import com.epam.tm.textTask.parser.Exceptions.ParserException;
 import com.epam.tm.textTask.parser.RegExpParser;
 import com.epam.tm.textTask.util.TextScanner;
@@ -11,7 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -22,9 +21,13 @@ public class Main {
         TextScanner textScanner = new TextScanner();
         RegExpParser parser = new RegExpParser();
 
+
         Text text = parser.parseText(textScanner.readFile());
 
-        System.out.println(text.getString());
-    }
 
+        List<Iterator> asd = new ArrayList<>();
+                text.getIterator(asd,Sentence.class);
+
+        System.out.println(asd.getClass());
+    }
 }
